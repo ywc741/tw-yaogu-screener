@@ -53,6 +53,8 @@ jobs:
     timeout-minutes: 60
     env:
       TZ: Asia/Taipei
+      # 推播裡「看網站」按鈕連到自己的 GitHub Pages
+      SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
     steps:
       - uses: actions/checkout@v4
 
@@ -78,7 +80,7 @@ jobs:
           r=$(ls data/cache/rev_*.json 2>/dev/null | wc -l)
           echo "快取中有 $n 個交易日的行情檔、$r 個月營收檔"
           if [ "$n" -lt 500 ] || [ "$r" -lt 60 ]; then
-            gh release download data-seed --repo "$GITHUB_REPOSITORY" -p market-cache.tar.gz -D /tmp
+            gh release download data-seed --repo ghiting76914-sys/tw-yaogu-screener -p market-cache.tar.gz -D /tmp
             tar -xzf /tmp/market-cache.tar.gz --skip-old-files -C data/cache
             echo "補齊後有 $(ls data/cache/twse_*.json | wc -l) 個交易日的行情檔"
           fi
